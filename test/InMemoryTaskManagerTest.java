@@ -1,4 +1,4 @@
-import manager.HistoryManager;
+
 import manager.InMemoryTaskManager;
 import manager.Managers;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
    private InMemoryTaskManager taskManager;
-    HistoryManager historyManager ;
 
     @BeforeEach
     void toInstall() {
-        historyManager = Managers.getDefaultHistory();
-        taskManager = new InMemoryTaskManager(historyManager);
+        taskManager = (InMemoryTaskManager)Managers.getDefault();
     }
 
     @Test

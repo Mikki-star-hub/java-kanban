@@ -1,25 +1,21 @@
 import manager.HistoryManager;
-import manager.InMemoryTaskManager;
+import manager.InMemoryHistoryManager;
 import manager.Managers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
-import manager.InMemoryHistoryManager;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     private HistoryManager historyManager;
-    InMemoryTaskManager taskManager;
-
+    private static final int MAX_HISTORY_SIZE = 10;
 
     @BeforeEach
     void setUp() {
         historyManager = Managers.getDefaultHistory();
-        taskManager = new InMemoryTaskManager(historyManager);
     }
 
     @Test
@@ -37,26 +33,28 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testSavedPreviousVersionOfTask() {
-        Task constTask = new Task("Constant Task Title", "Constant Task Description");
-        taskManager.createTask(constTask);
-        taskManager.getById(constTask.getId());
+        Task task = new Task( "Constant Task Title", "Constant Task Description");
+        historyManager.add(task);
+        // Получаем задачу из истории
         ArrayList<Task> taskHistory = historyManager.getHistory();
         assertNotNull(taskHistory, "История задачи должна быть не пустой.");
         assertEquals(1, taskHistory.size(), "История задачи должна содержать одну задачу.");
-        assertEquals(constTask, taskHistory.get(0), "История задачи должна содержать оригинальную задачу.");
+        assertEquals(task, taskHistory.get(0), "История задачи должна содержать оригинальную задачу.");
     }
 
     @Test
     void testHistorySizeLimit() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
         // Создаем и добавляем задачи, допустим их 12
         for (int i = 1; i <= 12; i++) {
             Task task = new Task("Task " + i, "Description " + i);
-            taskManager.createTask(task);
-            taskManager.getById(task.getId());
+            task.setId(i);
+            historyManager.add(task);
         }
         ArrayList<Task> taskHistory = historyManager.getHistory();
-        assertEquals(InMemoryHistoryManager.getMaxHistorySize(), taskHistory.size(), "История должна содержать " + InMemoryHistoryManager.getMaxHistorySize() + " задач.");
+        assertEquals(MAX_HISTORY_SIZE, taskHistory.size(), "История должна содержать " + MAX_HISTORY_SIZE + " задач.");
         assertEquals(3, taskHistory.get(0).getId(), "Первая задача в истории должна быть Task 3.");
         assertEquals(12, taskHistory.get(taskHistory.size() - 1).getId(), "Последняя задача в истории должна быть Task 12.");
+         // не понимаю почему он не считает кол-во? при тесте всегда 0 выводит
     }
 }
