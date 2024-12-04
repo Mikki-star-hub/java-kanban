@@ -55,6 +55,5 @@ class InMemoryHistoryManagerTest {
         assertEquals(MAX_HISTORY_SIZE, taskHistory.size(), "История должна содержать " + MAX_HISTORY_SIZE + " задач.");
         assertEquals(3, taskHistory.get(0).getId(), "Первая задача в истории должна быть Task 3.");
         assertEquals(12, taskHistory.get(taskHistory.size() - 1).getId(), "Последняя задача в истории должна быть Task 12.");
-         // не понимаю почему он не считает кол-во? при тесте всегда 0 выводит
     }
 }

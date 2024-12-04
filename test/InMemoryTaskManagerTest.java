@@ -1,6 +1,6 @@
-
 import manager.InMemoryTaskManager;
 import manager.Managers;
+import manager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-   private InMemoryTaskManager taskManager;
+   private TaskManager taskManager;
 
     @BeforeEach
     void toInstall() {
-        taskManager = (InMemoryTaskManager)Managers.getDefault();
+        taskManager = Managers.getDefault();
     }
 
     @Test
@@ -40,7 +40,6 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testTaskUnchangedAfterAdding() {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
         Task consttask = new Task("Constant Task Title", "Constant Task Description");
         taskManager.createTask(consttask);
         Task addedTask = taskManager.getById(consttask.getId());
