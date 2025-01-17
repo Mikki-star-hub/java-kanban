@@ -5,7 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,8 +21,11 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testAddTaskToHistory() {
-        Task task1 = new Task( "Task 1", "Description 1");
-        Task task2 = new Task( "Task 2", "Description 2");
+        Task task1 = new Task("Task 1", "Description 1");
+        Task task2 = new Task("Task 2", "Description 2");
+
+        task1.setId(1);
+        task2.setId(2);
 
         historyManager.add(task1);
         historyManager.add(task2);
@@ -33,10 +37,10 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testSavedPreviousVersionOfTask() {
-        Task task = new Task( "Constant Task Title", "Constant Task Description");
+        Task task = new Task("Constant Task Title", "Constant Task Description");
         historyManager.add(task);
         // Получаем задачу из истории
-        ArrayList<Task> taskHistory = historyManager.getHistory();
+        List<Task> taskHistory = historyManager.getHistory();
         assertNotNull(taskHistory, "История задачи должна быть не пустой.");
         assertEquals(1, taskHistory.size(), "История задачи должна содержать одну задачу.");
         assertEquals(task, taskHistory.get(0), "История задачи должна содержать оригинальную задачу.");
@@ -51,9 +55,65 @@ class InMemoryHistoryManagerTest {
             task.setId(i);
             historyManager.add(task);
         }
-        ArrayList<Task> taskHistory = historyManager.getHistory();
+        List<Task> taskHistory = historyManager.getHistory();
         assertEquals(MAX_HISTORY_SIZE, taskHistory.size(), "История должна содержать " + MAX_HISTORY_SIZE + " задач.");
         assertEquals(3, taskHistory.get(0).getId(), "Первая задача в истории должна быть Task 3.");
         assertEquals(12, taskHistory.get(taskHistory.size() - 1).getId(), "Последняя задача в истории должна быть Task 12.");
+    }
+
+    @Test
+    void testAddAndGetHistory() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+
+        Task task1 = new Task("Task 1", "Description 1");
+        task1.setId(1);
+
+        Task task2 = new Task("Task 2", "Description 2");
+        task2.setId(2);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+
+        List<Task> history = historyManager.getHistory();
+
+        assertEquals(2, history.size());
+        assertEquals(task1, history.get(0));
+        assertEquals(task2, history.get(1));
+    }
+
+    @Test
+    void testRemoveFromHistory() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+
+        Task task1 = new Task("Task 1", "Description 1");
+        task1.setId(1);
+
+        Task task2 = new Task("Task 2", "Description 2");
+        task2.setId(2);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.remove(1);
+
+        List<Task> history = historyManager.getHistory();
+
+        assertEquals(1, history.size());
+        assertEquals(task2, history.get(0));
+    }
+
+    @Test
+    void testDuplicateAddition() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+
+        Task task1 = new Task("Task 1", "Description 1");
+        task1.setId(1);
+
+        historyManager.add(task1);
+        historyManager.add(task1); // Добавляем дубликат
+
+        List<Task> history = historyManager.getHistory();
+
+        assertEquals(1, history.size());
+        assertEquals(task1, history.get(0));
     }
 }
