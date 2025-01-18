@@ -36,6 +36,12 @@ public interface TaskManager {
     ArrayList<Subtask> getSubtasksByEpicId(int epicId);
 
     ArrayList<Task> getHistory();
+
+    void removeAllTasks();
+
+    void removeAllSubtasks();
+
+    void removeAllEpics();
 }
 
 
