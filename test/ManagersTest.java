@@ -3,8 +3,11 @@ import manager.Managers;
 import manager.TaskManager;
 import org.junit.jupiter.api.Test;
 import manager.HistoryManager;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import manager.InMemoryHistoryManager;
+
 class ManagersTest {
 
     @Test

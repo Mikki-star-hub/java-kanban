@@ -7,6 +7,7 @@ import tasks.Subtask;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SubtaskTest {
+
     @Test
     void testSubtaskEqualityById() {
         Epic epic = new Epic("Epic 1", "Epic Description");
